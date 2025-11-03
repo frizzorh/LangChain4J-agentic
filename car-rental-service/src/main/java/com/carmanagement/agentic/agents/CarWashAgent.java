@@ -1,12 +1,12 @@
 package com.carmanagement.agentic.agents;
 
 import com.carmanagement.agentic.tools.CarWashTool;
-import dev.langchain4j.agentic.Agent;
 import dev.langchain4j.service.SystemMessage;
 import dev.langchain4j.service.UserMessage;
+import dev.langchain4j.service.V;
+import dev.langchain4j.agentic.Agent;
 import io.quarkiverse.langchain4j.ToolBox;
 
-// --8<-- [start:carWashAgent]
 /**
  * Agent that determines what car wash services to request.
  */
@@ -14,11 +14,14 @@ public interface CarWashAgent {
 
     @SystemMessage("""
         You handle intake for the car wash department of a car rental company.
-        It is your job to submit a request to the provided requestCarWash function to take action based on the provided feedback.
-        Be specific about what services are needed.
-        If no car wash is needed based on the feedback, respond with "CARWASH_NOT_REQUIRED".
         """)
     @UserMessage("""
+        Taking into account all provided feedback, determine if the car needs a car wash.
+        If the feedback indicates the car is dirty, has stains, or any other cleanliness issues,
+        call the provided tool and recommend appropriate car wash services (exterior wash, interior cleaning, waxing, detailing).
+        Be specific about what services are needed.
+        If no car wash is needed based on the feedback, respond with "CARWASH_NOT_REQUIRED".
+        
         Car Information:
         Make: {carMake}
         Model: {carModel}
@@ -29,7 +32,8 @@ public interface CarWashAgent {
         Rental Feedback: {rentalFeedback}
         Car Wash Feedback: {carWashFeedback}
         """)
-    @Agent("Car wash specialist. Determines what car wash services are needed.")
+    @Agent(outputName = "carWashAgentResult",
+            description = "Car wash specialist. Determines what car wash services are needed.")
     @ToolBox(CarWashTool.class)
     String processCarWash(
             String carMake,
@@ -39,5 +43,5 @@ public interface CarWashAgent {
             String rentalFeedback,
             String carWashFeedback);
 }
-// --8<-- [end:carWashAgent]
+
 

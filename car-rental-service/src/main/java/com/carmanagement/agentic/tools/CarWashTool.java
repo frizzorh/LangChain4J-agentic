@@ -6,7 +6,6 @@ import dev.langchain4j.agent.tool.Tool;
 import jakarta.enterprise.context.Dependent;
 import jakarta.transaction.Transactional;
 
-// --8<-- [start:CarWashTool]
 /**
  * Tool for requesting car wash operations.
  */
@@ -28,7 +27,7 @@ public class CarWashTool {
      * @return A summary of the car wash request
      */
     @Tool("Requests a car wash with the specified options")
-    @Transactional
+    @Transactional    
     public String requestCarWash(
             Long carNumber,
             String carMake,
@@ -56,7 +55,6 @@ public class CarWashTool {
         System.out.println("\uD83D\uDE97 CarWashTool result: " + result);
         return result;
     }
-// --8<-- [end:CarWashTool]
 
     private String generateCarWashSummary(
             Long carNumber,

@@ -15,6 +15,7 @@ public class CarInfo extends PanacheEntity {
     public String make;
     public String model;
     public Integer year;
+    public String condition;
     
     @Enumerated(EnumType.STRING)
     public CarStatus status;

@@ -7,7 +7,6 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
 import org.jboss.resteasy.reactive.RestQuery;
 
-// --8<-- [start:car-management]
 /**
  * REST resource for car management operations.
  */
@@ -61,5 +60,5 @@ public class CarManagementResource {
         }
     }
 }
-// --8<-- [end:car-management]
+
 

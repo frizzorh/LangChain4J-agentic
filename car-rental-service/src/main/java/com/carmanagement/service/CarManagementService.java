@@ -1,9 +1,9 @@
 package com.carmanagement.service;
 
-import com.carmanagement.agentic.agents.CarWashAgent;
+import com.carmanagement.agentic.workflow.CarProcessingWorkflow;
+import com.carmanagement.model.CarConditions;
 import com.carmanagement.model.CarInfo;
 import com.carmanagement.model.CarStatus;
-
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -14,16 +14,22 @@ import jakarta.transaction.Transactional;
 @ApplicationScoped
 public class CarManagementService {
 
-    @Inject
-    CarWashAgent carWashAgent;
+    /**
+     * Enum representing the type of agent to be selected for car processing
+     */
+    public enum AgentType {
+        CAR_WASH,
+        NONE
+    }
 
-    // --8<-- [start:processCarReturn]
+    @Inject
+    CarProcessingWorkflow carProcessingWorkflow;
+
     /**
      * Process a car return from any operation.
      *
      * @param carNumber The car number
      * @param rentalFeedback Optional rental feedback
-     * @param carWashFeedback Optional car wash feedback
      * @return Result of the processing
      */
     @Transactional
@@ -33,22 +39,26 @@ public class CarManagementService {
             return "Car not found with number: " + carNumber;
         }
 
-        // Process the car result
-        String result = carWashAgent.processCarWash(
+        // Process the car return using the workflow and get the AgenticScope
+        CarConditions carConditions = carProcessingWorkflow.processCarReturn(
                 carInfo.make,
                 carInfo.model,
                 carInfo.year,
                 carNumber,
+                carInfo.condition,
                 rentalFeedback != null ? rentalFeedback : "",
                 carWashFeedback != null ? carWashFeedback : "");
 
-        if (result.toUpperCase().contains("CARWASH_NOT_REQUIRED")) {
-            carInfo.status = CarStatus.AVAILABLE;
-            carInfo.persist();
+        // Update the car's condition with the result from CarConditionFeedbackAgent
+        carInfo.condition = carConditions.generalCondition();
+
+        // If carwash was not required, make the car available to rent
+        if (!carConditions.carWashRequired()) {
+            carInfo.status = CarStatus.AVAILABLE;            
         }
+        
+        carInfo.persist();
 
-        return result;
+        return carConditions.generalCondition();
     }
-    // --8<-- [end:processCarReturn]
 }
-

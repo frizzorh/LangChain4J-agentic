@@ -177,6 +177,7 @@ function filterCars() {
             car.make.toLowerCase().includes(filterText) ||
             car.model.toLowerCase().includes(filterText) ||
             String(car.year).toLowerCase().includes(filterText) ||
+            (car.condition && car.condition.toLowerCase().includes(filterText)) ||
             getStatusDisplay(car.status).toLowerCase().includes(filterText)
         );
     });
@@ -206,6 +207,7 @@ function populateFleetStatusTable(cars) {
             <td>${car.make}</td>
             <td>${car.model}</td>
             <td>${car.year}</td>
+            <td>${car.condition || 'N/A'}</td>
             <td><span class="status-pill ${statusPillClass}">${getStatusDisplay(car.status)}</span></td>
         `;
         
