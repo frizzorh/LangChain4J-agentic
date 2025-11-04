@@ -5,5 +5,7 @@
     <file url="file://$PROJECT_DIR$/car-management-service/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/car-rental-service/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/car-rental-service/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/disposition-a2a-agent/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/disposition-a2a-agent/src/main/resources" charset="UTF-8" />
   </component>
 </project>

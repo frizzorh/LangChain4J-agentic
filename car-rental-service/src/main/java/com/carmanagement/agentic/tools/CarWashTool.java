@@ -4,6 +4,7 @@ import com.carmanagement.model.CarInfo;
 import com.carmanagement.model.CarStatus;
 import dev.langchain4j.agent.tool.Tool;
 import jakarta.enterprise.context.Dependent;
+import jakarta.transaction.Transactional;
 
 /**
  * Tool for requesting car wash operations.
@@ -26,6 +27,7 @@ public class CarWashTool {
      * @return A summary of the car wash request
      */
     @Tool("Requests a car wash with the specified options")
+    @Transactional
     public String requestCarWash(
             Long carNumber,
             String carMake,
@@ -50,7 +52,7 @@ public class CarWashTool {
         String result = generateCarWashSummary(carNumber, carMake, carModel, carYear,
                                               exteriorWash, interiorCleaning, detailing,
                                               waxing, requestText);
-        System.out.println("\uD83D\uDE97 CarWashTool result: " + result);
+        System.out.println("CarWashTool result: " + result);
         return result;
     }
 

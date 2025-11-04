@@ -89,6 +89,10 @@ tr:hover {
     background-color: #4caf50; /* Green */
 }
 
+.status-pill-disposition {
+    background-color: #9c27b0; /* Purple */
+}
+
 /* Section background colors matching status colors */
 #rental-return-section {
     border-left: 5px solid #ffecb3;
@@ -100,6 +104,10 @@ tr:hover {
 
 #maintenance-section {
     border-left: 5px solid #ffb3b3;
+}
+
+#disposition-section {
+    border-left: 5px solid #e1bee7;
 }
 
 /* Tabs styling */

@@ -1,6 +1,7 @@
 package com.carmanagement.agentic.workflow;
 
 import com.carmanagement.agentic.agents.CarWashFeedbackAgent;
+import com.carmanagement.agentic.agents.DispositionFeedbackAgent;
 import com.carmanagement.agentic.agents.MaintenanceFeedbackAgent;
 import dev.langchain4j.agentic.Agent;
 import dev.langchain4j.agentic.declarative.ParallelAgent;
@@ -17,7 +18,8 @@ public interface FeedbackWorkflow {
     @Agent(outputName = "feedbackResult")
     @ParallelAgent(outputName = "feedbackResult", subAgents = {
             @SubAgent(type = CarWashFeedbackAgent.class, outputName = "carWashRequest"),
-            @SubAgent(type = MaintenanceFeedbackAgent.class, outputName = "maintenanceRequest")
+            @SubAgent(type = MaintenanceFeedbackAgent.class, outputName = "maintenanceRequest"),
+            @SubAgent(type = DispositionFeedbackAgent.class, outputName = "dispositionRequest")
     })
     String analyzeFeedback(
             String carMake,

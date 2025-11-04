@@ -70,6 +70,7 @@ function loadAllCars() {
             populateRentalReturnTable(carsData.filter(car => car.status === 'RENTED'));
             populateCarWashTable(carsData.filter(car => car.status === 'AT_CAR_WASH'));
             populateMaintenanceTable(carsData.filter(car => car.status === 'IN_MAINTENANCE'));
+            populateDispositionTable(carsData.filter(car => car.status === 'PENDING_DISPOSITION'));
         })
         .catch(error => {
             console.error('Error fetching cars:', error);
@@ -303,6 +304,30 @@ function populateMaintenanceTable(cars) {
     });
 }
 
+// Function to populate the Disposition table
+function populateDispositionTable(cars) {
+    const tableBody = document.getElementById('disposition-table-body');
+    tableBody.innerHTML = ''; // Clear existing rows
+    
+    if (cars.length === 0) {
+        tableBody.innerHTML = '<tr><td colspan="6">No cars pending disposition</td></tr>';
+        return;
+    }
+    
+    cars.forEach(car => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${car.id}</td>
+            <td>${car.make}</td>
+            <td>${car.model}</td>
+            <td>${car.year}</td>
+            <td>${car.condition || 'N/A'}</td>
+            <td>${car.dispositionDate ? new Date(car.dispositionDate).toLocaleDateString() : 'Not scheduled'}</td>
+        `;
+        
+        tableBody.appendChild(row);
+    });
+}
 
 // Function to return a car from rental
 function returnFromRental(event, carId) {
@@ -387,6 +412,8 @@ function getStatusClass(status) {
             return 'status-maintenance';
         case 'AVAILABLE':
             return 'status-available';
+        case 'PENDING_DISPOSITION':
+            return 'status-disposition';
         default:
             return '';
     }
@@ -403,6 +430,8 @@ function getStatusPillClass(status) {
             return 'status-pill-maintenance';
         case 'AVAILABLE':
             return 'status-pill-available';
+        case 'PENDING_DISPOSITION':
+            return 'status-pill-disposition';
         default:
             return '';
     }
@@ -419,6 +448,8 @@ function getStatusDisplay(status) {
             return 'In Maintenance';
         case 'AVAILABLE':
             return 'Available to Rent';
+        case 'PENDING_DISPOSITION':
+            return 'Pending Disposition';
         default:
             return status;
     }

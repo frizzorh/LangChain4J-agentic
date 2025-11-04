@@ -1,8 +1,8 @@
 package com.carmanagement.agentic.agents;
 
+import dev.langchain4j.agentic.Agent;
 import dev.langchain4j.service.SystemMessage;
 import dev.langchain4j.service.UserMessage;
-import dev.langchain4j.agentic.Agent;
 
 /**
  * Agent that analyzes feedback to determine if a car wash is needed.
@@ -29,8 +29,7 @@ public interface CarWashFeedbackAgent {
         Car Wash Feedback: {carWashFeedback}
         Maintenance Feedback: {maintenanceFeedback}
         """)
-    @Agent(description = "Car wash analyzer. Using feedback, determines if a car wash is needed.",
-            outputName = "carWashRequest")
+    @Agent(description = "Car wash analyzer. Using feedback, determines if a car wash is needed.", outputName = "carWashRequest")
     String analyzeForCarWash(
             String carMake,
             String carModel,

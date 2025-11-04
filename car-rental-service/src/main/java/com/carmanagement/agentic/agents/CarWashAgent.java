@@ -1,9 +1,9 @@
 package com.carmanagement.agentic.agents;
 
 import com.carmanagement.agentic.tools.CarWashTool;
+import dev.langchain4j.agentic.Agent;
 import dev.langchain4j.service.SystemMessage;
 import dev.langchain4j.service.UserMessage;
-import dev.langchain4j.agentic.Agent;
 import io.quarkiverse.langchain4j.ToolBox;
 
 /**
@@ -30,8 +30,7 @@ public interface CarWashAgent {
         Car Wash Request:
         {carWashRequest}
         """)
-    @Agent(description = "Car wash specialist. Determines what car wash services are needed.",
-            outputName = "carWashAgentResult")
+    @Agent(description = "Car wash specialist. Determines what car wash services are needed.", outputName = "carWashAgentResult")
     @ToolBox(CarWashTool.class)
     String processCarWash(
             String carMake,

@@ -6,6 +6,7 @@
       <list>
         <option value="$PROJECT_DIR$/car-management-service/pom.xml" />
         <option value="$PROJECT_DIR$/car-rental-service/pom.xml" />
+        <option value="$PROJECT_DIR$/disposition-a2a-agent/pom.xml" />
       </list>
     </option>
   </component>

@@ -18,7 +18,7 @@ public interface CarProcessingWorkflow {
     @SequenceAgent(outputName = "carProcessingAgentResult", subAgents = {
             @SubAgent(type = FeedbackWorkflow.class, outputName = "carProcessingAgentResult"),
             @SubAgent(type = ActionWorkflow.class, outputName = "carProcessingAgentResult"),
-            @SubAgent(type = CarConditionFeedbackAgent.class, outputName = "carProcessingAgentResult")
+            @SubAgent(type = CarConditionFeedbackAgent.class, outputName = "carCondition")
     })
     CarConditions processCarReturn(
             String carMake,
@@ -31,10 +31,12 @@ public interface CarProcessingWorkflow {
             String maintenanceFeedback);
 
     @Output
-    static CarConditions output(String carCondition, String maintenanceRequest, String carWashRequest) {
+    static CarConditions output(String carCondition, String dispositionRequest, String maintenanceRequest, String carWashRequest) {
         RequiredAction requiredAction;
         // Check maintenance first (higher priority)
-        if (isRequired(maintenanceRequest)) {
+        if (isRequired(dispositionRequest)) {
+            requiredAction = RequiredAction.DISPOSITION;
+        } else if (isRequired(maintenanceRequest)) {
             requiredAction = RequiredAction.MAINTENANCE;
         } else if (isRequired(carWashRequest)) {
             requiredAction = RequiredAction.CAR_WASH;

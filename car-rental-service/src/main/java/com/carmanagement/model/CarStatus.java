@@ -7,7 +7,8 @@ public enum CarStatus {
     IN_MAINTENANCE("in maintenance"),
     RENTED("rented"),
     AT_CAR_WASH("at car wash"),
-    AVAILABLE("available to rent");
+    AVAILABLE("available to rent"),
+    PENDING_DISPOSITION("pending disposition");
     
     private final String value;
     

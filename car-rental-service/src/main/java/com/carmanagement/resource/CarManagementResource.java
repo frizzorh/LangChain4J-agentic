@@ -4,6 +4,7 @@ import com.carmanagement.service.CarManagementService;
 import io.quarkus.logging.Log;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.jboss.resteasy.reactive.RestQuery;
 
@@ -61,7 +62,7 @@ public class CarManagementResource {
     
     /**
      * Process a car return from maintenance.
-     *
+     * 
      * @param carNumber The car number
      * @param maintenanceFeedback Optional maintenance feedback
      * @return Result of the processing
