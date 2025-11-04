@@ -4,6 +4,7 @@ package com.carmanagement.model;
  * Enum representing the possible statuses of a car in the rental fleet.
  */
 public enum CarStatus {
+    IN_MAINTENANCE("in maintenance"),
     RENTED("rented"),
     AT_CAR_WASH("at car wash"),
     AVAILABLE("available to rent");

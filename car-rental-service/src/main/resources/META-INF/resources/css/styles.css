@@ -81,6 +81,10 @@ tr:hover {
     background-color: #03a9f4; /* Blue */
 }
 
+.status-pill-maintenance {
+    background-color: #f44336; /* Red */
+}
+
 .status-pill-available {
     background-color: #4caf50; /* Green */
 }
@@ -92,6 +96,10 @@ tr:hover {
 
 #car-wash-section {
     border-left: 5px solid #b3e0ff;
+}
+
+#maintenance-section {
+    border-left: 5px solid #ffb3b3;
 }
 
 /* Tabs styling */
@@ -139,6 +147,10 @@ tr:hover {
 
 #car-wash-section.tab-content {
     border-top: 3px solid #b3e0ff;
+}
+
+#maintenance-section.tab-content {
+    border-top: 3px solid #ffb3b3;
 }
 
 /* Sortable table styles */

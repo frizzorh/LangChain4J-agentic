@@ -3,7 +3,6 @@ package com.carmanagement.agentic.agents;
 import com.carmanagement.agentic.tools.CarWashTool;
 import dev.langchain4j.service.SystemMessage;
 import dev.langchain4j.service.UserMessage;
-import dev.langchain4j.service.V;
 import dev.langchain4j.agentic.Agent;
 import io.quarkiverse.langchain4j.ToolBox;
 
@@ -20,7 +19,7 @@ public interface CarWashAgent {
         If the feedback indicates the car is dirty, has stains, or any other cleanliness issues,
         call the provided tool and recommend appropriate car wash services (exterior wash, interior cleaning, waxing, detailing).
         Be specific about what services are needed.
-        If no car wash is needed based on the feedback, respond with "CARWASH_NOT_REQUIRED".
+        If no specific car wash request is provided, request a standard exterior wash.
         
         Car Information:
         Make: {carMake}
@@ -28,20 +27,18 @@ public interface CarWashAgent {
         Year: {carYear}
         Car Number: {carNumber}
         
-        Feedback:
-        Rental Feedback: {rentalFeedback}
-        Car Wash Feedback: {carWashFeedback}
+        Car Wash Request:
+        {carWashRequest}
         """)
-    @Agent(outputName = "carWashAgentResult",
-            description = "Car wash specialist. Determines what car wash services are needed.")
+    @Agent(description = "Car wash specialist. Determines what car wash services are needed.",
+            outputName = "carWashAgentResult")
     @ToolBox(CarWashTool.class)
     String processCarWash(
             String carMake,
             String carModel,
             Integer carYear,
             Long carNumber,
-            String rentalFeedback,
-            String carWashFeedback);
+            String carWashRequest);
 }
 
 

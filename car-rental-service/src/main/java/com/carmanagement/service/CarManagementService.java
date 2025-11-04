@@ -4,6 +4,7 @@ import com.carmanagement.agentic.workflow.CarProcessingWorkflow;
 import com.carmanagement.model.CarConditions;
 import com.carmanagement.model.CarInfo;
 import com.carmanagement.model.CarStatus;
+import com.carmanagement.model.RequiredAction;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -14,14 +15,6 @@ import jakarta.transaction.Transactional;
 @ApplicationScoped
 public class CarManagementService {
 
-    /**
-     * Enum representing the type of agent to be selected for car processing
-     */
-    public enum AgentType {
-        CAR_WASH,
-        NONE
-    }
-
     @Inject
     CarProcessingWorkflow carProcessingWorkflow;
 
@@ -30,10 +23,12 @@ public class CarManagementService {
      *
      * @param carNumber The car number
      * @param rentalFeedback Optional rental feedback
+     * @param carWashFeedback Optional car wash feedback
+     * @param maintenanceFeedback Optional maintenance feedback
      * @return Result of the processing
      */
     @Transactional
-    public String processCarReturn(Long carNumber, String rentalFeedback, String carWashFeedback) {
+    public String processCarReturn(Long carNumber, String rentalFeedback, String carWashFeedback, String maintenanceFeedback) {
         CarInfo carInfo = CarInfo.findById(carNumber);
         if (carInfo == null) {
             return "Car not found with number: " + carNumber;
@@ -47,18 +42,22 @@ public class CarManagementService {
                 carNumber,
                 carInfo.condition,
                 rentalFeedback != null ? rentalFeedback : "",
-                carWashFeedback != null ? carWashFeedback : "");
+                carWashFeedback != null ? carWashFeedback : "",
+                maintenanceFeedback != null ? maintenanceFeedback : "");
 
         // Update the car's condition with the result from CarConditionFeedbackAgent
         carInfo.condition = carConditions.generalCondition();
 
-        // If carwash was not required, make the car available to rent
-        if (!carConditions.carWashRequired()) {
-            carInfo.status = CarStatus.AVAILABLE;            
+        // If no action is required, then the car should be available for the next rental
+        if (carConditions.requiredAction() == RequiredAction.NONE) {
+            carInfo.status = CarStatus.AVAILABLE;
         }
         
+        // Persist the changes to the database
         carInfo.persist();
 
         return carConditions.generalCondition();
     }
 }
+
+

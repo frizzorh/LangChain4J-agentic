@@ -69,6 +69,7 @@ function loadAllCars() {
             populateFleetStatusTable(carsData);
             populateRentalReturnTable(carsData.filter(car => car.status === 'RENTED'));
             populateCarWashTable(carsData.filter(car => car.status === 'AT_CAR_WASH'));
+            populateMaintenanceTable(carsData.filter(car => car.status === 'IN_MAINTENANCE'));
         })
         .catch(error => {
             console.error('Error fetching cars:', error);
@@ -273,6 +274,35 @@ function populateCarWashTable(cars) {
     });
 }
 
+// Function to populate the Maintenance table
+function populateMaintenanceTable(cars) {
+    const tableBody = document.getElementById('maintenance-table-body');
+    tableBody.innerHTML = ''; // Clear existing rows
+    
+    if (cars.length === 0) {
+        tableBody.innerHTML = '<tr><td colspan="6">No cars currently in maintenance</td></tr>';
+        return;
+    }
+    
+    cars.forEach(car => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${car.id}</td>
+            <td>${car.make}</td>
+            <td>${car.model}</td>
+            <td>${car.year}</td>
+            <td>
+                <form id="rentalReturnForm" onsubmit="returnFromMaintenance(event, ${car.id})">
+                    <input type="text" class="feedback-input" id="maintenance-feedback-${car.id}" placeholder="Enter feedback">
+                    <button class="return-button">Return</button>
+                </form>
+            </td>
+        `;
+        
+        tableBody.appendChild(row);
+    });
+}
+
 
 // Function to return a car from rental
 function returnFromRental(event, carId) {
@@ -322,6 +352,29 @@ function returnFromCarWash(event, carId) {
     });
 }
 
+// Function to return a car from maintenance
+function returnFromMaintenance(event, carId) {
+    event.preventDefault();
+    const feedback = document.getElementById(`maintenance-feedback-${carId}`).value;
+    
+    fetch(`/car-management/maintenance-return/${carId}?maintenanceFeedback=${encodeURIComponent(feedback)}`, {
+        method: 'POST'
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.text();
+    })
+    .then(data => {
+        showNotification('Car successfully returned from maintenance');
+        loadAllCars(); // Refresh all tables
+    })
+    .catch(error => {
+        console.error('Error returning car from maintenance:', error);
+        displayError('Failed to process maintenance return. Please try again.');
+    });
+}
 
 // Helper function to get CSS class based on car status
 function getStatusClass(status) {
@@ -330,6 +383,8 @@ function getStatusClass(status) {
             return 'status-rented';
         case 'AT_CAR_WASH':
             return 'status-carwash';
+        case 'IN_MAINTENANCE':
+            return 'status-maintenance';
         case 'AVAILABLE':
             return 'status-available';
         default:
@@ -344,6 +399,8 @@ function getStatusPillClass(status) {
             return 'status-pill-rented';
         case 'AT_CAR_WASH':
             return 'status-pill-carwash';
+        case 'IN_MAINTENANCE':
+            return 'status-pill-maintenance';
         case 'AVAILABLE':
             return 'status-pill-available';
         default:
@@ -358,6 +415,8 @@ function getStatusDisplay(status) {
             return 'Rented';
         case 'AT_CAR_WASH':
             return 'At Car Wash';
+        case 'IN_MAINTENANCE':
+            return 'In Maintenance';
         case 'AVAILABLE':
             return 'Available to Rent';
         default:

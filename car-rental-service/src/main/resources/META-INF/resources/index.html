@@ -63,6 +63,7 @@
         <div class="tabs">
             <button class="tab-button active" data-tab="rental-return">Rental Return</button>
             <button class="tab-button" data-tab="car-wash">Car Wash Return</button>
+            <button class="tab-button" data-tab="maintenance">Maintenance Return</button>
         </div>
         
         <!-- Rental Return Tab Content -->
@@ -106,6 +107,28 @@
                 </tbody>
             </table>
         </div>
+        
+        <!-- Maintenance Return Tab Content -->
+        <div id="maintenance-section" class="tab-content">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Car Number</th>
+                        <th>Make</th>
+                        <th>Model</th>
+                        <th>Year</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="maintenance-table-body">
+                    <!-- Table rows will be populated by JavaScript -->
+                    <tr>
+                        <td colspan="5">Loading data...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
     </div>
     
     <script src="/js/app.js"></script>
