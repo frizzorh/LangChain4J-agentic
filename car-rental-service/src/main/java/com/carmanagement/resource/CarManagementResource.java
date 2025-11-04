@@ -6,6 +6,8 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
 import org.jboss.resteasy.reactive.RestQuery;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 // --8<-- [start:car-management]
 /**
@@ -13,7 +15,7 @@ import org.jboss.resteasy.reactive.RestQuery;
  */
 @Path("/car-management")
 public class CarManagementResource {
-    
+
     @Inject
     CarManagementService carManagementService;
     
@@ -32,7 +34,7 @@ public class CarManagementResource {
             String result = carManagementService.processCarReturn(carNumber, rentalFeedback, "");
             return Response.ok(result).build();
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.error(e.getMessage(), e);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity("Error processing rental return: " + e.getMessage())
                     .build();
