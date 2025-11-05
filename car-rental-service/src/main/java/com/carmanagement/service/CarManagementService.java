@@ -4,6 +4,7 @@ import com.carmanagement.agentic.agents.CarWashAgent;
 import com.carmanagement.model.CarInfo;
 import com.carmanagement.model.CarStatus;
 
+import io.quarkus.logging.Log;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -17,7 +18,6 @@ public class CarManagementService {
     @Inject
     CarWashAgent carWashAgent;
 
-    // --8<-- [start:processCarReturn]
     /**
      * Process a car return from any operation.
      *
@@ -43,12 +43,12 @@ public class CarManagementService {
                 carWashFeedback != null ? carWashFeedback : "");
 
         if (result.toUpperCase().contains("CARWASH_NOT_REQUIRED")) {
+            Log.infov("Carwash not required for {0}", carInfo);
             carInfo.status = CarStatus.AVAILABLE;
             carInfo.persist();
         }
 
         return result;
     }
-    // --8<-- [end:processCarReturn]
 }
 

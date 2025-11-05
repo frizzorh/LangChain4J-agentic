@@ -3,10 +3,11 @@ package com.carmanagement.agentic.tools;
 import com.carmanagement.model.CarInfo;
 import com.carmanagement.model.CarStatus;
 import dev.langchain4j.agent.tool.Tool;
+import io.quarkus.logging.Log;
 import jakarta.enterprise.context.Dependent;
 import jakarta.transaction.Transactional;
+import jakarta.ws.rs.NotFoundException;
 
-// --8<-- [start:CarWashTool]
 /**
  * Tool for requesting car wash operations.
  */
@@ -48,21 +49,20 @@ public class CarWashTool {
         if (carInfo != null) {
             carInfo.status = CarStatus.AT_CAR_WASH;
             carInfo.persist();
+            String result = generateCarWashSummary(carInfo,
+                    exteriorWash, interiorCleaning, detailing,
+                    waxing, requestText);
+            Log.info("\uD83D\uDE97 CarWashTool result: " + result);
+            return result;
+        } else {
+            Log.errorv("CarNumber {0} not found.", carNumber);
+            throw new NotFoundException("CarNumber: " + carNumber);
         }
-        
-        String result = generateCarWashSummary(carNumber, carMake, carModel, carYear,
-                                              exteriorWash, interiorCleaning, detailing,
-                                              waxing, requestText);
-        System.out.println("\uD83D\uDE97 CarWashTool result: " + result);
-        return result;
+
     }
-// --8<-- [end:CarWashTool]
 
     private String generateCarWashSummary(
-            Long carNumber,
-            String carMake,
-            String carModel,
-            Integer carYear,
+            CarInfo carInfo,
             boolean exteriorWash,
             boolean interiorCleaning,
             boolean detailing,
@@ -70,9 +70,7 @@ public class CarWashTool {
             String requestText) {
 
         StringBuilder summary = new StringBuilder();
-        summary.append("Car wash requested for ").append(carMake).append(" ")
-               .append(carModel).append(" (").append(carYear).append("), Car #")
-               .append(carNumber).append(":\n");
+        summary.append("Car wash requested for ").append(carInfo.toString()).append(" ").append(":\n");
         
         if (exteriorWash) {
             summary.append("- Exterior wash\n");
