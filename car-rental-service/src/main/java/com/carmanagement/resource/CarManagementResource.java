@@ -28,7 +28,7 @@ public class CarManagementResource {
     public Response processRentalReturn(Long carNumber, @RestQuery String rentalFeedback) {
         
         try {
-            String result = carManagementService.processCarReturn(carNumber, rentalFeedback, "");
+            String result = carManagementService.processCarReturn(carNumber, rentalFeedback, "", "");
             return Response.ok(result).build();
         } catch (Exception e) {
             Log.error(e.getMessage(), e);
