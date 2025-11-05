@@ -4,6 +4,7 @@ import com.carmanagement.agentic.workflow.CarProcessingWorkflow;
 import com.carmanagement.model.CarConditions;
 import com.carmanagement.model.CarInfo;
 import com.carmanagement.model.CarStatus;
+import io.quarkus.logging.Log;
 import com.carmanagement.model.RequiredAction;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -52,7 +53,7 @@ public class CarManagementService {
         if (carConditions.requiredAction() == RequiredAction.NONE) {
             carInfo.status = CarStatus.AVAILABLE;
         }
-        
+
         // Persist the changes to the database
         carInfo.persist();
 

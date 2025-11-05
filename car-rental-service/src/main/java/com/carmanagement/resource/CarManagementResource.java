@@ -12,7 +12,7 @@ import org.jboss.resteasy.reactive.RestQuery;
  */
 @Path("/car-management")
 public class CarManagementResource {
-    
+
     @Inject
     CarManagementService carManagementService;
     
@@ -28,7 +28,7 @@ public class CarManagementResource {
     public Response processRentalReturn(Long carNumber, @RestQuery String rentalFeedback) {
         
         try {
-            String result = carManagementService.processCarReturn(carNumber, rentalFeedback, "", "");
+            String result = carManagementService.processCarReturn(carNumber, rentalFeedback, "");
             return Response.ok(result).build();
         } catch (Exception e) {
             Log.error(e.getMessage(), e);
@@ -58,7 +58,7 @@ public class CarManagementResource {
                     .build();
         }
     }
-    
+
     /**
      * Process a car return from maintenance.
      *
@@ -69,7 +69,7 @@ public class CarManagementResource {
     @POST
     @Path("/maintenance-return/{carNumber}")
     public Response processMaintenanceReturn(Long carNumber, @RestQuery String maintenanceFeedback) {
-        
+
         try {
             String result = carManagementService.processCarReturn(carNumber, "", "", maintenanceFeedback);
             return Response.ok(result).build();
