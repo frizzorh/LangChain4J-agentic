@@ -13,7 +13,7 @@ import org.jboss.resteasy.reactive.RestQuery;
  */
 @Path("/car-management")
 public class CarManagementResource {
-    
+
     @Inject
     CarManagementService carManagementService;
     
@@ -59,7 +59,7 @@ public class CarManagementResource {
                     .build();
         }
     }
-    
+
     /**
      * Process a car return from maintenance.
      * 
@@ -70,7 +70,7 @@ public class CarManagementResource {
     @POST
     @Path("/maintenance-return/{carNumber}")
     public Response processMaintenanceReturn(Long carNumber, @RestQuery String maintenanceFeedback) {
-        
+
         try {
             String result = carManagementService.processCarReturn(carNumber, "", "", maintenanceFeedback);
             return Response.ok(result).build();
