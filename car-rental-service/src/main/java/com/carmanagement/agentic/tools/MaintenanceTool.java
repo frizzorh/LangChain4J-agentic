@@ -7,7 +7,6 @@ import io.quarkus.logging.Log;
 import jakarta.enterprise.context.Dependent;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Tool for requesting car maintenance operations.
@@ -61,7 +60,7 @@ public class MaintenanceTool {
         }
     }
 
-    private static @NotNull String generateCarWashSummary(boolean oilChange, boolean tireRotation, boolean brakeService, boolean engineService, boolean transmissionService, String requestText, CarInfo carInfo) {
+    private static String generateCarWashSummary(boolean oilChange, boolean tireRotation, boolean brakeService, boolean engineService, boolean transmissionService, String requestText, CarInfo carInfo) {
         StringBuilder summary = new StringBuilder();
         summary.append("Maintenance requested for ").append(carInfo.toString()).append(":\n");
 
