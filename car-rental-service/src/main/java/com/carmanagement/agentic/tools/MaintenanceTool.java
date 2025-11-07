@@ -3,8 +3,11 @@ package com.carmanagement.agentic.tools;
 import com.carmanagement.model.CarInfo;
 import com.carmanagement.model.CarStatus;
 import dev.langchain4j.agent.tool.Tool;
+import io.quarkus.logging.Log;
 import jakarta.enterprise.context.Dependent;
 import jakarta.transaction.Transactional;
+import jakarta.ws.rs.NotFoundException;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Tool for requesting car maintenance operations.
@@ -48,40 +51,44 @@ public class MaintenanceTool {
         if (carInfo != null) {
             carInfo.status = CarStatus.IN_MAINTENANCE;
             carInfo.persist();
+            String result = generateCarWashSummary(oilChange, tireRotation, brakeService, engineService, transmissionService, requestText, carInfo);
+            Log.info("\uD83D\uDE97 MaintenanceTool result: " + result);
+            return result;
+        } else {
+            Log.errorv("CarNumber {0} not found.", carNumber);
+            throw new NotFoundException("CarNumber: " + carNumber);
         }
-        
+    }
+
+    private static @NotNull String generateCarWashSummary(boolean oilChange, boolean tireRotation, boolean brakeService, boolean engineService, boolean transmissionService, String requestText, CarInfo carInfo) {
         StringBuilder summary = new StringBuilder();
-        summary.append("Maintenance requested for ").append(carMake).append(" ")
-               .append(carModel).append(" (").append(carYear).append("), Car #")
-               .append(carNumber).append(":\n");
-        
+        summary.append("Maintenance requested for ").append(carInfo.toString()).append(":\n");
+
         if (oilChange) {
             summary.append("- Oil change\n");
         }
-        
+
         if (tireRotation) {
             summary.append("- Tire rotation\n");
         }
-        
+
         if (brakeService) {
             summary.append("- Brake service\n");
         }
-        
+
         if (engineService) {
             summary.append("- Engine service\n");
         }
-        
+
         if (transmissionService) {
             summary.append("- Transmission service\n");
         }
-        
+
         if (requestText != null && !requestText.isEmpty()) {
             summary.append("Additional notes: ").append(requestText);
         }
-        
-        String result = summary.toString();
-        System.out.println("\uD83D\uDE97 MaintenanceTool result: " + result);
-        return result;
+
+        return summary.toString();
     }
 }
 
