@@ -1,6 +1,7 @@
 package com.demo;
 
 import dev.langchain4j.agent.tool.Tool;
+import io.quarkus.logging.Log;
 import jakarta.inject.Singleton;
 
 /**
@@ -58,7 +59,7 @@ public class DispositionTool {
                 carNumber + ": " +
                 dispositionOption.getDescription() +
                 "\n";
-        System.out.println("⛍ DispositionTool result: " + result);
+        Log.info("⛍ DispositionTool result: " + result);
         return result;
     }
 }
